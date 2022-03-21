@@ -1,0 +1,24 @@
+version: "3.5"
+services:
+
+  # ros
+  ros:
+    image: ros-ir:latest
+    hostname: ros
+    container_name: ros
+    privileged: true
+    volumes:
+      - ./config/21064185.xml:/root/catkin_ws/src/optris_drivers/config/generic.xml
+      # - ./ros/config/optris_drivers.launch:/root/catkin_ws/src/optris_drivers/launch/optris_drivers.launch
+      - ./ros/config/optris_imager.yaml:/tmp/.ros/camera_info/optris_imager.yaml
+      - /dev/bus/:/dev/bus/:ro
+      - /dev/serial:/dev/serial:ro
+    devices:
+      - /dev:/dev
+    network_mode: host
+    environment:
+      - ROS_MASTER_URI=http://ialvarez-pc:11311/
+      - ROS_HOSTNAME=ialvarez-pc
+    command: ["/bin/bash", "-c", "source /opt/ros/melodic/setup.bash && source /root/catkin_ws/devel/setup.bash && roslaunch gara_infrared_camera gara_infrared_camera.launch temperatureMin:=20 temperatureMax:=50"]
+    
+        
